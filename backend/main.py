@@ -92,8 +92,20 @@ async def internal_server_error_handler(request: Request, exc: Exception):
     )
 
 
-# ── Health Check ─────────────────────────────────────────────────────
+# ── Health & Root Check ──────────────────────────────────────────────
+@app.get("/", tags=["Root"])
+@app.head("/", tags=["Root"])
+async def root():
+    """Root endpoint for load balancers, Render health checks, and status."""
+    return {
+        "status": "healthy",
+        "service": "UpGrades API",
+        "version": app.version,
+    }
+
+
 @app.get("/health", tags=["Health"])
+@app.head("/health", tags=["Health"])
 async def health_check():
     """Health check endpoint for load balancers and monitoring."""
     return {
