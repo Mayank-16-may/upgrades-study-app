@@ -158,17 +158,23 @@ async def generate_plan_with_fallback(
         return await generate_study_plan(
             client, text, subject_name, exam_date, weekly_hours, primary_model
         )
-    except HTTPException as e:
-        if e.status_code == 503:
-            raise  # Circuit is open — don't try fallback
+    except Exception as e:
+        # Check if circuit is open
+        if isinstance(e, HTTPException) and "Circuit open" in str(e.detail):
+            raise
         logger.warning(
             "primary_model_failed_trying_fallback",
             primary=primary_model,
             fallback=fallback_model,
+            error=str(e),
         )
-        return await generate_study_plan(
-            client, text, subject_name, exam_date, weekly_hours, fallback_model
-        )
+        try:
+            return await generate_study_plan(
+                client, text, subject_name, exam_date, weekly_hours, fallback_model
+            )
+        except Exception as fallback_err:
+            logger.error("fallback_model_also_failed", error=str(fallback_err))
+            raise HTTPException(status_code=503, detail="AI generation failed. Please try again in a few moments.")
 
 
 async def chat_with_tutor(

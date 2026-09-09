@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     supabase_jwt_secret: str
     gemini_api_key: str
     rate_limit_per_minute: int = 5
-    gemini_model: str = 'gemini-3.7-flash'
-    gemini_fallback_model: str = 'gemini-3.6-flash'
+    gemini_model: str = 'gemini-3.6-flash'
+    gemini_fallback_model: str = 'gemini-flash-latest'
     ai_max_retries: int = 3
     max_file_size_mb: int = 10
     frontend_url: str = "http://localhost:5173"
