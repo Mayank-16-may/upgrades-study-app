@@ -379,31 +379,49 @@ const Dashboard = () => {
             gap: '16px',
             marginTop: '40px',
             paddingTop: '32px',
-            borderTop: '1px solid var(--wb-offBlack8, #e5e7eb)',
+            borderTop: '1px solid var(--wb-offBlack16)',
             textAlign: 'left'
           }}>
-            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+            <div style={{
+              padding: '16px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--wb-offWhite)',
+              border: '1px solid var(--wb-offBlack16)',
+              transition: 'background-color 0.2s ease, border-color 0.2s ease'
+            }}>
               <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
-                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>1</span>
-                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Upload Syllabus</strong>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue)', color: '#ffffff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>1</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack)', fontWeight: '700'}}>Upload Syllabus</strong>
               </div>
-              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Upload a PDF or paste your course topics</p>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64)', margin: 0, lineHeight: '1.4'}}>Upload a PDF or paste your course topics</p>
             </div>
 
-            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+            <div style={{
+              padding: '16px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--wb-offWhite)',
+              border: '1px solid var(--wb-offBlack16)',
+              transition: 'background-color 0.2s ease, border-color 0.2s ease'
+            }}>
               <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
-                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>2</span>
-                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Get AI Plan</strong>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue)', color: '#ffffff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>2</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack)', fontWeight: '700'}}>Get AI Plan</strong>
               </div>
-              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Receive an adaptive weekly study roadmap</p>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64)', margin: 0, lineHeight: '1.4'}}>Receive an adaptive weekly study roadmap</p>
             </div>
 
-            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+            <div style={{
+              padding: '16px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--wb-offWhite)',
+              border: '1px solid var(--wb-offBlack16)',
+              transition: 'background-color 0.2s ease, border-color 0.2s ease'
+            }}>
               <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
-                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>3</span>
-                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Ace Your Exams</strong>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue)', color: '#ffffff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>3</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack)', fontWeight: '700'}}>Ace Your Exams</strong>
               </div>
-              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Track daily goals & chat with your AI tutor</p>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64)', margin: 0, lineHeight: '1.4'}}>Track daily goals & chat with your AI tutor</p>
             </div>
           </div>
         </div>
