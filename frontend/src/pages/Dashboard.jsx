@@ -1,35 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { PlayCircle, FileText, MessageSquare, CheckCircle, Circle, BookOpen, Calendar, X, PlusCircle, Trash2 } from 'lucide-react';
+import { PlayCircle, FileText, MessageSquare, CheckCircle, Circle, BookOpen, Calendar, X, PlusCircle, Trash2, Sparkles, UploadCloud, ArrowRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
 import { fetchPlan, fetchSubjects, deleteSubject, updatePlan, callBackendWithAuth } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
 
-const initialMockSubjects = [
-  {
-    id: 's1',
-    title: 'AP Physics C',
-    progress: 33,
-    topics: [
-      { id: 1, title: 'Newton\'s Laws of Motion', completed: true },
-      { id: 2, title: 'Thermodynamics & Heat Transfer', completed: false },
-      { id: 3, title: 'Electromagnetism Basics', completed: false }
-    ],
-    examDate: '2026-11-15',
-    weeklyHours: 10
-  },
-  {
-    id: 's2',
-    title: 'Calculus BC',
-    progress: 75,
-    topics: [
-      { id: 4, title: 'Limits and Continuity', completed: true },
-      { id: 5, title: 'Derivatives', completed: true },
-      { id: 6, title: 'Integrals and Series', completed: false }
-    ],
-    examDate: '2026-12-01',
-    weeklyHours: 8
-  }
-];
+// No mock subjects: new visitors start with a clean dashboard
+const initialMockSubjects = [];
 
 const buildTopicsFromPlan = (plan, subjectName) => {
   const topics = [];
@@ -97,11 +73,11 @@ const subjectFromBackend = (subject, planRow) => {
 const Dashboard = () => {
   const location = useLocation();
   const { isAuthenticated, loading: authLoading } = useAuth();
-  const [subjects, setSubjects] = useState(initialMockSubjects);
+  const [subjects, setSubjects] = useState([]);
   
   // Safely initialize active subject
-  const [activeSubject, setActiveSubject] = useState(initialMockSubjects.length > 0 ? initialMockSubjects[0] : null);
-  const [activeTopic, setActiveTopic] = useState(activeSubject ? activeSubject.topics[1] : null);
+  const [activeSubject, setActiveSubject] = useState(null);
+  const [activeTopic, setActiveTopic] = useState(null);
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(false);
   const [loadError, setLoadError] = useState('');
   
@@ -120,8 +96,17 @@ const Dashboard = () => {
     if (authLoading) return;
 
     if (!isAuthenticated) {
-      setSubjects(initialMockSubjects);
-      setActiveSubject(initialMockSubjects[0] || null);
+      const incomingSubject = location.state?.newSubject
+        ? subjectFromGeneratedPlan(location.state.newSubject)
+        : null;
+
+      if (incomingSubject) {
+        setSubjects([incomingSubject]);
+        setActiveSubject(incomingSubject);
+      } else {
+        setSubjects([]);
+        setActiveSubject(null);
+      }
       setLoadError('');
       return;
     }
@@ -349,21 +334,79 @@ const Dashboard = () => {
 
   if (subjects.length === 0 || !activeSubject) {
     return (
-      <div className="dashboard-container" style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column', textAlign: 'center'}}>
-        <div style={{backgroundColor: 'var(--wb-offBlack8)', padding: '40px', borderRadius: '50%', marginBottom: '24px'}}>
-          <BookOpen size={64} color="var(--wb-offBlack32)" />
+      <div className="dashboard-container" style={{justifyContent: 'center', alignItems: 'center', minHeight: '80vh', padding: '40px 20px'}}>
+        <div className="card" style={{maxWidth: '680px', width: '100%', padding: '48px 36px', textAlign: 'center', boxShadow: '0 20px 40px rgba(0,0,0,0.06)'}}>
+          <div style={{
+            width: '84px',
+            height: '84px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px auto'
+          }}>
+            <BookOpen size={42} color="var(--wb-blue, #2563eb)" />
+          </div>
+
+          <h2 style={{fontSize: '28px', fontWeight: '800', marginBottom: '12px', color: 'var(--wb-offBlack, #111827)'}}>
+            {loadError ? 'Could not load study plans' : 'Try adding subjects to get study plans'}
+          </h2>
+
+          <p style={{fontSize: '16px', color: 'var(--wb-offBlack64, #6b7280)', lineHeight: '1.6', marginBottom: '32px', maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto'}}>
+            {loadError || "Your dashboard is currently empty. Upload your syllabus or enter your subject topics to get an AI-generated weekly study plan and smart tutor."}
+          </p>
+
+          <Link to="/upload" style={{display: 'inline-block', textDecoration: 'none'}}>
+            <button className="btn-primary" style={{
+              padding: '16px 36px',
+              fontSize: '17px',
+              fontWeight: '700',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              borderRadius: '12px',
+              cursor: 'pointer'
+            }}>
+              <PlusCircle size={20} /> Upload Syllabus / Add Subject
+            </button>
+          </Link>
+
+          {/* 3-Step Quick Guide */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+            gap: '16px',
+            marginTop: '40px',
+            paddingTop: '32px',
+            borderTop: '1px solid var(--wb-offBlack8, #e5e7eb)',
+            textAlign: 'left'
+          }}>
+            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>1</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Upload Syllabus</strong>
+              </div>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Upload a PDF or paste your course topics</p>
+            </div>
+
+            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>2</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Get AI Plan</strong>
+              </div>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Receive an adaptive weekly study roadmap</p>
+            </div>
+
+            <div style={{padding: '14px', borderRadius: '10px', backgroundColor: 'var(--wb-offBlack4, #f9fafb)', border: '1px solid var(--wb-offBlack8, #f3f4f6)'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px'}}>
+                <span style={{width: '24px', height: '24px', borderRadius: '50%', background: 'var(--wb-blue, #2563eb)', color: '#fff', fontSize: '13px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>3</span>
+                <strong style={{fontSize: '14px', color: 'var(--wb-offBlack, #111827)'}}>Ace Your Exams</strong>
+              </div>
+              <p style={{fontSize: '13px', color: 'var(--wb-offBlack64, #6b7280)', margin: 0, lineHeight: '1.4'}}>Track daily goals & chat with your AI tutor</p>
+            </div>
+          </div>
         </div>
-        <h2 style={{fontSize: '32px', fontWeight: '900', marginBottom: '16px'}}>
-          {loadError ? 'Could not load study plans' : 'No Study Plans Yet!'}
-        </h2>
-        <p style={{fontSize: '18px', color: 'var(--wb-offBlack64)', marginBottom: '32px', maxWidth: '500px'}}>
-          {loadError || "You haven't uploaded any syllabi. Get started by uploading your first syllabus and let our AI generate your personalized study plan."}
-        </p>
-        <Link to="/">
-          <button className="btn-primary" style={{padding: '16px 32px', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '8px'}}>
-            <PlusCircle size={20} /> Create a Study Plan
-          </button>
-        </Link>
       </div>
     );
   }
@@ -398,7 +441,12 @@ const Dashboard = () => {
         
         {/* Subject Selector */}
         <div className="card" style={{...styles.sidebarCard, marginBottom: 'var(--wb-spacing-medium)'}}>
-          <h3 style={styles.sidebarTitle}><BookOpen size={18} style={{marginRight: '8px'}}/> My Subjects</h3>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px'}}>
+            <h3 style={{...styles.sidebarTitle, margin: 0}}><BookOpen size={18} style={{marginRight: '8px'}}/> My Subjects</h3>
+            <Link to="/upload" title="Add another subject" style={{display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: 'var(--wb-blue, #2563eb)', textDecoration: 'none', fontWeight: '600'}}>
+              <PlusCircle size={15} /> Add
+            </Link>
+          </div>
           <select 
             style={styles.subjectSelect} 
             value={activeSubject.id} 
