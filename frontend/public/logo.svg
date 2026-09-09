@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <g id="background">
+    <rect width="512" height="512" rx="100" fill="#1D3557" />
+  </g>
+  <g id="icon">
+    <!-- Geometric U -->
+    <path d="M 146,140 L 216,140 L 216,310 Q 216,350 256,350 Q 296,350 296,310 L 296,140 L 366,140 L 366,310 Q 366,410 256,410 Q 146,410 146,310 Z" fill="#FFFFFF" />
+    <!-- Rising element (arrow inside U) -->
+    <path d="M 256,80 L 176,190 L 236,190 L 236,290 L 276,290 L 276,190 L 336,190 Z" fill="#63B3ED" />
+  </g>
+</svg>

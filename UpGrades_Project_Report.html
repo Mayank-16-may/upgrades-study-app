@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpGrades — Full Project Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --blue: #1865f2;
+      --purple: #7c3aed;
+      --green: #059669;
+      --red: #dc2626;
+      --gold: #d97706;
+      --text: #1e293b;
+      --muted: #64748b;
+      --bg: #ffffff;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    @media print {
+      body { font-size: 11px; line-height: 1.5; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      .cover { min-height: 100vh; }
+    }
+
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      color: white;
+    }
+    .cover-logo { font-size: 72px; margin-bottom: 8px; }
+    .cover h1 { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 8px; }
+    .cover h2 { font-size: 22px; font-weight: 400; opacity: 0.7; margin-bottom: 48px; }
+    .cover-meta { font-size: 16px; opacity: 0.5; line-height: 2; }
+    .cover-badge {
+      display: inline-block;
+      padding: 8px 24px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      font-size: 14px;
+      opacity: 0.6;
+      margin-top: 32px;
+    }
+
+    .content { max-width: 800px; margin: 0 auto; padding: 48px 40px; }
+
+    h1 { font-size: 32px; font-weight: 900; margin: 48px 0 16px; color: var(--text); letter-spacing: -0.5px; }
+    h2 { font-size: 24px; font-weight: 800; margin: 40px 0 12px; color: var(--blue); }
+    h3 { font-size: 18px; font-weight: 700; margin: 28px 0 10px; color: var(--text); }
+    h4 { font-size: 15px; font-weight: 700; margin: 20px 0 8px; color: var(--muted); }
+
+    p { margin-bottom: 12px; }
+    strong { font-weight: 700; }
+
+    .toc { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 32px; margin: 32px 0; }
+    .toc h2 { margin-top: 0; color: var(--text); }
+    .toc ol { padding-left: 20px; }
+    .toc li { padding: 6px 0; font-weight: 600; }
+    .toc li span { font-weight: 400; color: var(--muted); margin-left: 4px; }
+
+    table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 13px; }
+    th { background: #f1f5f9; text-align: left; padding: 10px 14px; font-weight: 700; border: 1px solid var(--border); }
+    td { padding: 10px 14px; border: 1px solid var(--border); vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    pre code { background: none; padding: 0; color: inherit; }
+
+    .callout {
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin: 16px 0;
+      border-left: 4px solid;
+    }
+    .callout-blue { background: rgba(24,101,242,0.06); border-color: var(--blue); }
+    .callout-green { background: rgba(5,150,105,0.06); border-color: var(--green); }
+    .callout-purple { background: rgba(124,58,237,0.06); border-color: var(--purple); }
+    .callout-gold { background: rgba(217,119,6,0.06); border-color: var(--gold); }
+    .callout strong { display: block; margin-bottom: 4px; }
+
+    .diagram {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin: 16px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    hr { border: none; height: 1px; background: var(--border); margin: 48px 0; }
+
+    .file { color: var(--blue); font-weight: 600; font-family: 'Fira Code', monospace; font-size: 12px; }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 40px 0 16px;
+    }
+    .step-num {
+      background: var(--blue);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .step-title { font-size: 22px; font-weight: 800; }
+
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 100;
+    }
+    .print-btn:hover { background: #1450c8; }
+
+    ul, ol { padding-left: 24px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">📄 Save as PDF</button>
+
+  <!-- COVER PAGE -->
+  <div class="cover">
+    <div class="cover-logo">📚</div>
+    <h1>UpGrades</h1>
+    <h2>AI-Powered Study Planner — Full Project Report</h2>
+    <div class="cover-meta">
+      <div><strong>Project Type:</strong> Full-Stack Web Application</div>
+      <div><strong>Frontend:</strong> React 19 &bull; Vite 8 &bull; Supabase Auth</div>
+      <div><strong>Backend:</strong> FastAPI &bull; Google Gemini AI &bull; PostgreSQL</div>
+      <div><strong>Date:</strong> August 2026</div>
+    </div>
+    <div class="cover-badge">Comprehensive Development Report</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <div class="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li>Project Overview <span>— What is UpGrades?</span></li>
+        <li>Technology Stack <span>— Every tool and library used</span></li>
+        <li>Architecture Overview <span>— System design and data flow</span></li>
+        <li>Step 1: Project Initialization <span>— Vite scaffold and dependencies</span></li>
+        <li>Step 2: HTML Entry Point <span>— The single HTML file</span></li>
+        <li>Step 3: React Bootstrapping <span>— Mounting the app</span></li>
+        <li>Step 4: Design System <span>— CSS tokens, dark mode, layout</span></li>
+        <li>Step 5: Supabase Client <span>— Database and auth connection</span></li>
+        <li>Step 6: Theme Context <span>— Dark/light mode system</span></li>
+        <li>Step 7: Auth Context <span>— Authentication state management</span></li>
+        <li>Step 8: Root Component &amp; Routing <span>— App structure and navigation</span></li>
+        <li>Step 9: API Layer <span>— Centralized backend communication</span></li>
+        <li>Step 10: Navbar Component <span>— Responsive navigation</span></li>
+        <li>Step 11: Auth Modal <span>— Login/signup interface</span></li>
+        <li>Step 12: Home Page <span>— Landing page with glassmorphism</span></li>
+        <li>Step 13: Upload Page <span>— Syllabus upload wizard</span></li>
+        <li>Step 14: Dashboard <span>— Study hub, progress tracking, AI chat</span></li>
+        <li>Step 15: Study Group &amp; Settings <span>— Gamification and preferences</span></li>
+        <li>Backend Overview <span>— FastAPI, endpoints, AI integration</span></li>
+        <li>Database Design <span>— Supabase PostgreSQL schema</span></li>
+        <li>Security &amp; Resilience <span>— JWT, RLS, rate limiting, circuit breaker</span></li>
+        <li>Complete File Map <span>— Every file in the project</span></li>
+      </ol>
+    </div>
+
+    <hr>
+
+    <!-- 1. PROJECT OVERVIEW -->
+    <h1>1. Project Overview</h1>
+    <p><strong>UpGrades</strong> is a full-stack AI-powered study planner web application. It solves a real problem: students receive a course syllabus but don't know how to turn it into a structured, day-by-day study plan.</p>
+
+    <h3>What the app does:</h3>
+    <ol>
+      <li><strong>Upload a syllabus</strong> — drag-and-drop a PDF file or paste raw text</li>
+      <li><strong>AI generates a study plan</strong> — Google Gemini AI analyzes the syllabus and creates a personalized, week-by-week plan with daily topics, resources, and time allocations</li>
+      <li><strong>Track progress</strong> — mark topics as complete, view percentage progress, follow daily missions</li>
+      <li><strong>Chat with an AI tutor</strong> — ask questions about any topic and get contextual help</li>
+      <li><strong>Study groups</strong> — compete with peers on leaderboards, earn XP, maintain streaks</li>
+      <li><strong>Customize preferences</strong> — AI teaching style, accessibility settings, account management</li>
+    </ol>
+
+    <hr>
+
+    <!-- 2. TECH STACK -->
+    <h1>2. Technology Stack</h1>
+
+    <h3>Frontend</h3>
+    <table>
+      <tr><th>Technology</th><th>Version</th><th>Purpose</th></tr>
+      <tr><td>React</td><td>19.2.8</td><td>UI component library</td></tr>
+      <tr><td>Vite</td><td>8.2.0</td><td>Build tool and dev server</td></tr>
+      <tr><td>React Router DOM</td><td>7.18.2</td><td>Client-side page routing</td></tr>
+      <tr><td>Supabase JS SDK</td><td>2.112.3</td><td>Authentication and session management</td></tr>
+      <tr><td>Lucide React</td><td>1.30.0</td><td>Icon library (tree-shakeable)</td></tr>
+      <tr><td>Oxlint</td><td>1.75.0</td><td>Code linting</td></tr>
+    </table>
+
+    <h3>Backend</h3>
+    <table>
+      <tr><th>Technology</th><th>Version</th><th>Purpose</th></tr>
+      <tr><td>FastAPI</td><td>0.115.12</td><td>Python async API framework</td></tr>
+      <tr><td>Uvicorn</td><td>0.34.3</td><td>ASGI web server</td></tr>
+      <tr><td>Google GenAI SDK</td><td>≥2.3.0</td><td>Gemini AI integration</td></tr>
+      <tr><td>PyMuPDF (fitz)</td><td>1.25.5</td><td>PDF text extraction</td></tr>
+      <tr><td>Supabase Python</td><td>2.15.2</td><td>Database client</td></tr>
+      <tr><td>python-jose</td><td>3.4.0</td><td>JWT token validation</td></tr>
+      <tr><td>SlowAPI</td><td>0.1.9</td><td>Rate limiting</td></tr>
+      <tr><td>structlog</td><td>25.4.0</td><td>Structured logging</td></tr>
+      <tr><td>tenacity</td><td>9.1.2</td><td>Retry logic with exponential backoff</td></tr>
+      <tr><td>pydantic-settings</td><td>2.9.1</td><td>Environment configuration</td></tr>
+    </table>
+
+    <h3>Infrastructure</h3>
+    <table>
+      <tr><th>Service</th><th>Purpose</th></tr>
+      <tr><td>Supabase (PostgreSQL)</td><td>Database with Row Level Security</td></tr>
+      <tr><td>Supabase Auth</td><td>Multi-provider authentication (Email, Google, GitHub, OTP)</td></tr>
+      <tr><td>Google Gemini AI</td><td>Study plan generation and AI tutor chat</td></tr>
+      <tr><td>Docker</td><td>Backend containerization (python:3.12-slim)</td></tr>
+    </table>
+
+    <hr>
+
+    <!-- 3. ARCHITECTURE -->
+    <h1>3. Architecture Overview</h1>
+
+    <div class="diagram">Frontend (React + Vite)                      Backend (FastAPI + Uvicorn)
+┌─────────────────────────────┐              ┌─────────────────────────────┐
+│                             │              │                             │
+│  Pages:                     │   HTTP +     │  main.py (API endpoints)    │
+│    HomePage                 │   JWT Token  │    ↓                        │
+│    UploadPage    ──────────────────────►   │  middleware/auth.py         │
+│    Dashboard                │              │    ↓                        │
+│    StudyGroup               │              │  services/parser.py (PDF)   │
+│    Settings                 │              │  services/ai.py (Gemini)    │
+│                             │              │  schemas/plan.py (Models)   │
+│  Contexts:                  │              │                             │
+│    AuthContext ◄──────────┐ │              └─────────┬───────────────────┘
+│    ThemeContext            │ │                        │
+│                           │ │                        ▼
+│  Lib:                     │ │              ┌─────────────────────┐
+│    supabase.js ───────────┘ │              │  Supabase           │
+│    api.js (HTTP client)     │              │  (PostgreSQL + Auth)│
+└─────────────────────────────┘              └─────────────────────┘
+                                                       │
+                                                       ▼
+                                             ┌─────────────────────┐
+                                             │  Google Gemini AI   │
+                                             └─────────────────────┘</div>
+
+    <h3>End-to-End Data Flow</h3>
+    <div class="diagram">User uploads PDF + enters subject details
+        │
+        ▼
+React Frontend ── POST /api/v1/generate-plan (JWT + FormData) ──► FastAPI
+        │                                                            │
+        │                                              Validate JWT → extract user_id
+        │                                              Validate & extract PDF (PyMuPDF)
+        │                                              INSERT into 'subjects' table
+        │                                              Send to Google Gemini AI
+        │                                              Receive structured JSON plan
+        │                                              INSERT into 'study_plans' table
+        │                                                            │
+        ◄── Returns { subject_id, plan_id, plan } ──────────────────┘
+        │
+Navigate to Dashboard with plan in router state (instant render)</div>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <!-- STEPS 1-3 -->
+    <h1>Frontend Build — Step by Step</h1>
+
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">Project Initialization with Vite</div>
+    </div>
+    <p>The project was created by running:</p>
+    <pre><code>npm create vite@latest frontend -- --template react
+npm install react-router-dom @supabase/supabase-js lucide-react</code></pre>
+    <p>Vite auto-generated the project structure. The <span class="file">vite.config.js</span> registers the React plugin for JSX transformation and Fast Refresh:</p>
+    <pre><code>import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+export default defineConfig({ plugins: [react()] })</code></pre>
+
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">HTML Entry Point</div>
+    </div>
+    <p>The <span class="file">index.html</span> is the only HTML file — making this an SPA:</p>
+    <pre><code>&lt;body&gt;
+  &lt;div id="root"&gt;&lt;/div&gt;
+  &lt;script type="module" src="/src/main.jsx"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+    <p>An empty <code>&lt;div&gt;</code> where React mounts the entire UI, and a script tag loading the React entry point.</p>
+
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">React Bootstrapping</div>
+    </div>
+    <pre><code>import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  &lt;StrictMode&gt;&lt;App /&gt;&lt;/StrictMode&gt;
+)</code></pre>
+    <p><code>createRoot()</code> is the React 19 rendering API. <code>StrictMode</code> enables development-time warnings.</p>
+
+    <hr>
+
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title">Design System &amp; Global Styles</div>
+    </div>
+    <p>We built a design token system in <span class="file">src/index.css</span> using CSS custom properties, inspired by Khan Academy's Wonder Blocks:</p>
+    <pre><code>:root {
+  --wb-blue: #1865f2;      /* Primary actions */
+  --wb-purple: #9059ff;    /* AI features */
+  --wb-green: #00a60e;     /* Success states */
+  --wb-gold: #ffb100;      /* Warnings, streaks */
+  --wb-red: #d92916;       /* Errors, danger */
+}
+
+/* Dark mode overrides */
+[data-theme='dark'] {
+  --wb-white: #1a1a2e;
+  --wb-offBlack: #e0e0e0;
+}</code></pre>
+    <p>Instead of hardcoding colors, every component uses <code>var(--wb-blue)</code>. Changing one variable updates the entire app. We also defined <code>.btn-primary</code>, <code>.card</code>, <code>.desktop-only/.mobile-only</code>, and responsive dashboard layout classes.</p>
+
+    <div class="callout callout-green">
+      <strong>No CSS Framework Used</strong>
+      All styling is custom CSS — no Tailwind, no Bootstrap. This gives full control and demonstrates deeper CSS knowledge.
+    </div>
+
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Supabase Client Setup</div>
+    </div>
+    <pre><code>import { createClient } from '@supabase/supabase-js';
+const supabaseUrl = 'https://fnfqhehkdvzdwnrlchzq.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIs...';
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);</code></pre>
+    <p>A singleton client shared by AuthContext (login/signup), api.js (JWT extraction), and Settings (profile updates). The anon key is a public key safe for frontend use — operations are restricted by Row Level Security.</p>
+
+    <div class="page-break"></div>
+
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title">Theme Context — Dark/Light Mode</div>
+    </div>
+    <pre><code>export const ThemeProvider = ({ children }) =&gt; {
+  const [isDark, setIsDark] = useState(() =&gt; {
+    const saved = localStorage.getItem('upgrades-theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() =&gt; {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('upgrades-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem('upgrades-theme', 'light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = () =&gt; setIsDark(prev =&gt; !prev);
+  return &lt;ThemeContext.Provider value={{ isDark, toggleTheme }}&gt;{children}&lt;/ThemeContext.Provider&gt;;
+};</code></pre>
+    <p>Checks localStorage first, then OS preference. Sets <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> to trigger CSS overrides. Persists choice across refreshes.</p>
+
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title">Auth Context — Authentication State</div>
+    </div>
+    <p>Manages user session globally with Supabase Auth:</p>
+    <pre><code>useEffect(() =&gt; {
+  // Get existing session on mount
+  supabase.auth.getSession().then(({ data: { session } }) =&gt; {
+    setSession(session);
+    setUser(session?.user ?? null);
+    setLoading(false);
+  });
+
+  // Listen for all auth changes (login, logout, token refresh)
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    (_event, session) =&gt; {
+      setSession(session);
+      setUser(session?.user ?? null);
+    }
+  );
+  return () =&gt; subscription.unsubscribe();
+}, []);</code></pre>
+    <p>Exposes methods: <code>signInWithEmail</code>, <code>signUpWithEmail</code>, <code>signInWithGoogle</code>, <code>signInWithGithub</code>, <code>signInWithOtp</code>, <code>verifyOtp</code>, <code>signOut</code>, plus state: <code>user</code>, <code>session</code>, <code>loading</code>, <code>isAuthenticated</code>.</p>
+
+    <div class="step-header">
+      <div class="step-num">8</div>
+      <div class="step-title">Root Component &amp; Routing</div>
+    </div>
+    <pre><code>function App() {
+  return (
+    &lt;ThemeProvider&gt;
+      &lt;AuthProvider&gt;
+        &lt;Router&gt;
+          &lt;AppContent /&gt;
+        &lt;/Router&gt;
+      &lt;/AuthProvider&gt;
+    &lt;/ThemeProvider&gt;
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const showNavbar = location.pathname !== '/';
+  return (
+    &lt;div className="app-container"&gt;
+      {showNavbar &amp;&amp; &lt;Navbar /&gt;}
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;HomePage /&gt;} /&gt;
+        &lt;Route path="/upload" element={&lt;UploadPage /&gt;} /&gt;
+        &lt;Route path="/dashboard" element={&lt;Dashboard /&gt;} /&gt;
+        &lt;Route path="/group" element={&lt;StudyGroup /&gt;} /&gt;
+        &lt;Route path="/settings" element={&lt;Settings /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+    <p>Providers wrap outside-in: Theme → Auth → Router. Navbar is hidden on the landing page using conditional rendering.</p>
+
+    <div class="page-break"></div>
+
+    <div class="step-header">
+      <div class="step-num">9</div>
+      <div class="step-title">API Layer — Backend Communication</div>
+    </div>
+    <pre><code>export async function callBackendWithAuth(endpoint, options = {}) {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Not authenticated.');
+
+  const response = await fetch(`${BACKEND_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${session.access_token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() =&gt; ({}));
+    throw new Error(errorData.detail || `Request failed: ${response.status}`);
+  }
+  return response.json();
+}</code></pre>
+    <p>Single point of JWT injection and error handling. All CRUD functions (<code>fetchSubjects</code>, <code>fetchPlan</code>, <code>updatePlan</code>, <code>deleteSubject</code>) are built on top. File uploads use <code>FormData</code> for multipart encoding.</p>
+
+    <div class="step-header">
+      <div class="step-num">10</div>
+      <div class="step-title">Navbar — Responsive Navigation</div>
+    </div>
+    <p>Sticky top bar with three rendering zones: desktop links, desktop actions (theme toggle + auth buttons), and a mobile hamburger dropdown. Uses <code>useAuth()</code> for conditional login/logout UI and <code>useTheme()</code> for sun/moon toggle. All links use React Router's <code>&lt;Link&gt;</code> for client-side navigation.</p>
+
+    <div class="step-header">
+      <div class="step-num">11</div>
+      <div class="step-title">Auth Modal — Login/Signup</div>
+    </div>
+    <p>Overlay modal with email/password form and Google/GitHub OAuth buttons. Key patterns:</p>
+    <ul>
+      <li><strong>Early return:</strong> <code>if (!isOpen) return null</code> — no DOM rendered when closed</li>
+      <li><strong>Mode toggle:</strong> Switch between login and signup forms</li>
+      <li><strong>Password visibility:</strong> Eye/EyeOff icon toggle</li>
+      <li><strong>Try-catch-finally:</strong> Async operations with loading states</li>
+    </ul>
+
+    <div class="step-header">
+      <div class="step-num">12</div>
+      <div class="step-title">Home Page — Glassmorphism Landing</div>
+    </div>
+    <p>Full-screen immersive page with hero background, dynamic welcome for authenticated users, and four glassmorphic navigation cards:</p>
+    <pre><code>.card-glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}</code></pre>
+    <p>Includes <code>@keyframes fadeUp</code> staggered animations and responsive CSS Grid (4→2→1 columns).</p>
+
+    <div class="step-header">
+      <div class="step-num">13</div>
+      <div class="step-title">Upload Page — Syllabus Wizard</div>
+    </div>
+    <p>Tabbed interface for PDF upload or text paste. Uses <code>useRef</code> for hidden file input triggered by a styled button. Multi-stage loading messages via <code>setTimeout</code>. Auth-gates unauthenticated users. After generation, navigates to Dashboard with the plan in <code>location.state</code> for instant rendering.</p>
+
+    <div class="page-break"></div>
+
+    <div class="step-header">
+      <div class="step-num">14</div>
+      <div class="step-title">Dashboard — The Core Study Hub</div>
+    </div>
+    <p>The largest component (829 lines). Key features:</p>
+    <ul>
+      <li><strong>Data loading:</strong> <code>useEffect</code> fetches subjects + plans in parallel with <code>Promise.all()</code>. A cleanup flag prevents state updates after unmount.</li>
+      <li><strong>Optimistic UI:</strong> Marks topics complete instantly, recalculates progress, persists to backend asynchronously in background.</li>
+      <li><strong>AI Tutor Chat:</strong> Sends topic + message + history to <code>/api/v1/chat</code>, displays conversation bubbles.</li>
+      <li><strong>Resource Links:</strong> Auto-generates YouTube and Google search URLs per topic.</li>
+      <li><strong>Schedule Editor:</strong> Modal to modify exam date and study hours.</li>
+      <li><strong>Subject Management:</strong> Dropdown selector, delete with confirmation.</li>
+    </ul>
+
+    <div class="step-header">
+      <div class="step-num">15</div>
+      <div class="step-title">Study Group &amp; Settings</div>
+    </div>
+    <p><strong>StudyGroup:</strong> Gamification page — leaderboard, XP scores, streak counters, rank badges, quiz CTA.</p>
+    <p><strong>Settings:</strong> Five-tab preferences panel:</p>
+    <table>
+      <tr><th>Tab</th><th>Features</th></tr>
+      <tr><td>Account</td><td>Name, email, school — updates via <code>supabase.auth.updateUser()</code></td></tr>
+      <tr><td>Notifications</td><td>Toggles for daily missions, group alerts, announcements</td></tr>
+      <tr><td>AI Tutor</td><td>Teaching style (Socratic/Direct/Storyteller), complexity level</td></tr>
+      <tr><td>Accessibility</td><td>Font size, dyslexia font, high contrast mode</td></tr>
+      <tr><td>Security</td><td>Password change, account deletion</td></tr>
+    </table>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <!-- BACKEND -->
+    <h1>Backend Overview</h1>
+
+    <h2>API Endpoints</h2>
+    <table>
+      <tr><th>Method</th><th>Path</th><th>Auth</th><th>Rate Limit</th><th>Description</th></tr>
+      <tr><td>GET</td><td><code>/health</code></td><td>No</td><td>—</td><td>Health check</td></tr>
+      <tr><td>POST</td><td><code>/api/v1/generate-plan</code></td><td>JWT</td><td>5/min</td><td>Upload syllabus → AI generates plan</td></tr>
+      <tr><td>GET</td><td><code>/api/v1/subjects</code></td><td>JWT</td><td>30/min</td><td>List user's subjects</td></tr>
+      <tr><td>GET</td><td><code>/api/v1/subjects/{id}/plan</code></td><td>JWT</td><td>30/min</td><td>Get study plan</td></tr>
+      <tr><td>PUT</td><td><code>/api/v1/subjects/{id}/plan</code></td><td>JWT</td><td>30/min</td><td>Update progress</td></tr>
+      <tr><td>DELETE</td><td><code>/api/v1/subjects/{id}</code></td><td>JWT</td><td>30/min</td><td>Delete subject</td></tr>
+      <tr><td>POST</td><td><code>/api/v1/chat</code></td><td>JWT</td><td>30/min</td><td>AI tutor chat</td></tr>
+    </table>
+
+    <h2>Backend Modules</h2>
+    <table>
+      <tr><th>File</th><th>Purpose</th></tr>
+      <tr><td><code>main.py</code></td><td>FastAPI app, all route handlers, CORS, rate limiting</td></tr>
+      <tr><td><code>config.py</code></td><td>Environment config from .env (pydantic-settings)</td></tr>
+      <tr><td><code>middleware/auth.py</code></td><td>JWT validation (HS256 + RS256 fallback)</td></tr>
+      <tr><td><code>services/ai.py</code></td><td>Gemini AI + retry + fallback model + circuit breaker</td></tr>
+      <tr><td><code>services/parser.py</code></td><td>PDF magic byte validation + PyMuPDF extraction</td></tr>
+      <tr><td><code>schemas/plan.py</code></td><td>Pydantic models: StudyPlanResponse → WeekPlan → DailyTask → Resource</td></tr>
+      <tr><td><code>utils/logging.py</code></td><td>Structured logging (JSON for prod, console for dev)</td></tr>
+    </table>
+
+    <h2>AI Integration</h2>
+    <ul>
+      <li><strong>Primary Model:</strong> gemini-3.6-flash</li>
+      <li><strong>Fallback Model:</strong> gemini-3.5-flash-lite</li>
+      <li><strong>Structured Output:</strong> Pydantic schema enforced via Gemini API</li>
+      <li><strong>Retry:</strong> 3 attempts, exponential backoff (2s → 4s → 8s)</li>
+      <li><strong>Circuit Breaker:</strong> 60s cooldown after 5 consecutive failures</li>
+    </ul>
+
+    <hr>
+
+    <!-- DATABASE -->
+    <h1>Database Design</h1>
+    <h3>Table: subjects</h3>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+      <tr><td>id</td><td>UUID (PK)</td><td>Unique identifier</td></tr>
+      <tr><td>user_id</td><td>UUID (FK)</td><td>Owner's auth ID</td></tr>
+      <tr><td>name</td><td>TEXT</td><td>Subject name</td></tr>
+      <tr><td>exam_date</td><td>DATE</td><td>Target exam date</td></tr>
+      <tr><td>weekly_study_hours</td><td>FLOAT</td><td>Weekly hour commitment</td></tr>
+      <tr><td>created_at</td><td>TIMESTAMPTZ</td><td>Creation time</td></tr>
+      <tr><td>deleted_at</td><td>TIMESTAMPTZ</td><td>Soft delete (null = active)</td></tr>
+    </table>
+
+    <h3>Table: study_plans</h3>
+    <table>
+      <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+      <tr><td>id</td><td>UUID (PK)</td><td>Unique identifier</td></tr>
+      <tr><td>subject_id</td><td>UUID (FK)</td><td>Associated subject</td></tr>
+      <tr><td>user_id</td><td>UUID (FK)</td><td>Owner's auth ID</td></tr>
+      <tr><td>plan_data</td><td>JSONB</td><td>Full study plan (weeks → days → topics)</td></tr>
+      <tr><td>raw_ai_response</td><td>TEXT</td><td>Original Gemini response</td></tr>
+      <tr><td>source_filename</td><td>TEXT</td><td>Original PDF filename</td></tr>
+      <tr><td>version</td><td>INTEGER</td><td>Plan version</td></tr>
+      <tr><td>created_at</td><td>TIMESTAMPTZ</td><td>Creation time</td></tr>
+    </table>
+
+    <hr>
+
+    <!-- SECURITY -->
+    <h1>Security &amp; Resilience</h1>
+    <table>
+      <tr><th>Feature</th><th>Implementation</th></tr>
+      <tr><td>JWT Authentication</td><td>All endpoints require valid Supabase JWT in Authorization header</td></tr>
+      <tr><td>Row Level Security</td><td>Scoped Supabase clients enforce per-user data isolation at DB level</td></tr>
+      <tr><td>Rate Limiting</td><td>SlowAPI — 5/min on generation, 30/min on others</td></tr>
+      <tr><td>PDF Validation</td><td>Magic byte check (%PDF header) + 10MB size limit</td></tr>
+      <tr><td>Circuit Breaker</td><td>60s cooldown after 5 consecutive Gemini API failures</td></tr>
+      <tr><td>Retry with Backoff</td><td>3 attempts with exponential delays on AI calls</td></tr>
+      <tr><td>CORS</td><td>Per-environment origin whitelisting</td></tr>
+      <tr><td>Dual JWT Decoding</td><td>HS256 (email) + RS256 (OAuth) signature support</td></tr>
+    </table>
+
+    <hr>
+    <div class="page-break"></div>
+
+    <!-- FILE MAP -->
+    <h1>Complete File Map</h1>
+    <pre><code>c:\study website\
+├── backend\
+│   ├── main.py                  # FastAPI app + all API endpoints
+│   ├── config.py                # Environment configuration
+│   ├── requirements.txt         # Python dependencies
+│   ├── Dockerfile               # Container build spec
+│   ├── .env / .env.example      # Environment variables
+│   ├── test_api.py              # Gemini API diagnostic script
+│   ├── middleware\
+│   │   └── auth.py              # JWT authentication middleware
+│   ├── services\
+│   │   ├── ai.py                # Gemini AI + circuit breaker
+│   │   └── parser.py            # PDF validation + extraction
+│   ├── schemas\
+│   │   └── plan.py              # Pydantic data models
+│   └── utils\
+│       └── logging.py           # Structured logging
+│
+└── frontend\
+    ├── package.json              # npm manifest + scripts
+    ├── vite.config.js            # Vite build config
+    ├── index.html                # SPA entry HTML
+    └── src\
+        ├── main.jsx              # React bootstrap
+        ├── App.jsx               # Root + routing
+        ├── App.css / index.css   # Global styles + design tokens
+        ├── components\
+        │   ├── Navbar.jsx        # Responsive navigation
+        │   └── AuthModal.jsx     # Login/signup modal
+        ├── pages\
+        │   ├── HomePage.jsx      # Landing page
+        │   ├── HomePage.css      # Landing styles
+        │   ├── Dashboard.jsx     # Study hub + AI chat
+        │   ├── UploadPage.jsx    # Syllabus upload
+        │   ├── StudyGroup.jsx    # Leaderboard
+        │   └── Settings.jsx      # Preferences (5 tabs)
+        ├── contexts\
+        │   ├── AuthContext.jsx   # Auth state (Supabase)
+        │   └── ThemeContext.jsx  # Theme state
+        └── lib\
+            ├── api.js            # HTTP client + JWT
+            └── supabase.js       # Supabase singleton</code></pre>
+
+    <hr>
+
+    <div style="text-align: center; padding: 40px 0; color: var(--muted);">
+      <p style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px;">— End of Report —</p>
+      <p>UpGrades — AI-Powered Study Planner</p>
+      <p>Full-Stack Web Application &bull; August 2026</p>
+    </div>
+
+  </div>
+</body>
+</html>

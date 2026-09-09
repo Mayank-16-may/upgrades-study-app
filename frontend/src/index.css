@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+:root {
+  /* Wonder Blocks Colors */
+  --wb-blue: #1865f2;
+  --wb-purple: #9059ff;
+  --wb-green: #00a60e;
+  --wb-gold: #ffb100;
+  --wb-red: #d92916;
+  --wb-offBlack: #21242c;
+  --wb-offBlack64: rgba(33, 36, 44, 0.64);
+  --wb-offBlack50: rgba(33, 36, 44, 0.50);
+  --wb-offBlack32: rgba(33, 36, 44, 0.32);
+  --wb-offBlack16: rgba(33, 36, 44, 0.16);
+  --wb-offBlack8: rgba(33, 36, 44, 0.08);
+  --wb-offWhite: #f7f8fa;
+  --wb-white: #ffffff;
+  --wb-darkBlue: #0b2149;
+  --wb-teal: #14bf96;
+
+  /* Spacing Tokens */
+  --wb-spacing-xxx-small: 4px;
+  --wb-spacing-xx-small: 6px;
+  --wb-spacing-x-small: 8px;
+  --wb-spacing-small: 12px;
+  --wb-spacing-medium: 16px;
+  --wb-spacing-large: 24px;
+  --wb-spacing-x-large: 32px;
+  --wb-spacing-xx-large: 48px;
+  --wb-spacing-xxx-large: 64px;
+
+  /* Fonts */
+  --wb-font-family: 'Lato', sans-serif;
+  
+  /* Shadows & Borders */
+  --wb-shadow-card: 0 4px 12px var(--wb-offBlack8);
+  --wb-shadow-hover: 0 8px 24px var(--wb-offBlack16);
+  --wb-border-radius: 8px;
+}
+
+[data-theme='dark'] {
+  --wb-offBlack: #f7f8fa;
+  --wb-offBlack64: rgba(247, 248, 250, 0.64);
+  --wb-offBlack50: rgba(247, 248, 250, 0.50);
+  --wb-offBlack32: rgba(247, 248, 250, 0.32);
+  --wb-offBlack16: rgba(247, 248, 250, 0.16);
+  --wb-offBlack8: rgba(247, 248, 250, 0.08);
+  --wb-offWhite: #111216;
+  --wb-white: #1a1c23;
+  --wb-darkBlue: #b5cefb;
+  --wb-shadow-card: 0 4px 12px rgba(0,0,0, 0.5);
+  --wb-shadow-hover: 0 8px 24px rgba(0,0,0, 0.8);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--wb-font-family);
+  color: var(--wb-offBlack);
+  background-color: var(--wb-offWhite);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+input, select, textarea {
+  color: var(--wb-offBlack);
+  background-color: var(--wb-white);
+}
+
+button {
+  color: var(--wb-offBlack);
+}
+a {
+  text-decoration: none;
+  color: var(--wb-blue);
+  font-weight: 700;
+}
+
+/* Mobile Responsiveness for Navbar */
+.desktop-only {
+  display: flex !important;
+}
+.mobile-only {
+  display: none !important;
+}
+.mobile-menu-dropdown {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+  .mobile-only {
+    display: flex !important;
+  }
+  .mobile-menu-dropdown.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px; /* Navbar height */
+    left: 0;
+    right: 0;
+    background-color: var(--wb-white);
+    border-bottom: 1px solid var(--wb-offBlack16);
+    padding: var(--wb-spacing-medium);
+    gap: var(--wb-spacing-medium);
+    box-shadow: 0 4px 12px var(--wb-offBlack8);
+    z-index: 99;
+  }
+}
+
+/* Bulletproof Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--wb-spacing-x-large);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--wb-spacing-x-large);
+  min-height: calc(100vh - 72px);
+}
+
+.dashboard-sidebar {
+  position: sticky;
+  top: 100px;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.dashboard-main {
+  flex-grow: 1;
+  min-width: 0; /* Prevents flex blowout */
+}
+
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+    padding: var(--wb-spacing-medium);
+    gap: var(--wb-spacing-medium);
+  }
+  .dashboard-sidebar {
+    position: static;
+    width: 100%;
+  }
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+/* Base Utility Classes */
+.btn-primary {
+  background-color: var(--wb-blue);
+  color: var(--wb-white);
+  padding: var(--wb-spacing-small) var(--wb-spacing-large);
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: #1558d6;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--wb-blue);
+  border: 1px solid var(--wb-blue);
+  padding: var(--wb-spacing-small) var(--wb-spacing-large);
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(24, 101, 242, 0.08);
+}
+
+.card {
+  background: var(--wb-white);
+  border-radius: var(--wb-border-radius);
+  padding: var(--wb-spacing-large);
+  box-shadow: var(--wb-shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--wb-shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* Spinner animation for loading states */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
